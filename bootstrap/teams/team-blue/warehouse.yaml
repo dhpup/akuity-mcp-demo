@@ -1,0 +1,19 @@
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Warehouse
+metadata:
+  name: team-blue
+  namespace: team-blue
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  shard: kargo-mac1
+  interval: 5m0s
+  freightCreationPolicy: Automatic
+  subscriptions:
+    - image:
+        repoURL: ghcr.io/akuity/guestbook
+        imageSelectionStrategy: SemVer
+        strictSemvers: true
+        ignoreTagsRegexes:
+          - ^latest$
+        discoveryLimit: 20
