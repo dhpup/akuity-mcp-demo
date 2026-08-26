@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: guestbook-staging
+  annotations:
+    kargo.akuity.io/authorized-stage: "guestbook:staging"
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/dhpup/akuity-mcp-demo.git
+    targetRevision: main
+    path: staging
+  destination:
+    name: mac1
+    namespace: guestbook-staging
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true

@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: guestbook-dev
+  annotations:
+    kargo.akuity.io/authorized-stage: "guestbook:dev"
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/dhpup/akuity-mcp-demo.git
+    targetRevision: main
+    path: dev
+  destination:
+    name: mac1
+    namespace: guestbook-dev
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
