@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: team-yellow-prod
+  annotations:
+    kargo.akuity.io/authorized-stage: "team-yellow:prod"
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/dhpup/akuity-mcp-demo.git
+    targetRevision: main
+    path: teams/team-yellow/prod
+  destination:
+    name: mac1
+    namespace: team-yellow-prod
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
