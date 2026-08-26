@@ -14,7 +14,6 @@ spec:
         repoURL: ghcr.io/akuity/guestbook
         imageSelectionStrategy: SemVer
         strictSemvers: true
-        constraint: 0.0.1
         ignoreTagsRegexes:
           - ^latest$
         discoveryLimit: 20
