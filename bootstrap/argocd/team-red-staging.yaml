@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: team-red-staging
+  annotations:
+    kargo.akuity.io/authorized-stage: "team-red:staging"
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/dhpup/akuity-mcp-demo.git
+    targetRevision: main
+    path: teams/team-red/staging
+  destination:
+    name: mac1
+    namespace: team-red-staging
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true

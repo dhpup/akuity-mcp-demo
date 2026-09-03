@@ -1,0 +1,41 @@
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Stage
+metadata:
+  name: dev
+  namespace: team-blue
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  shard: kargo-mac1
+  requestedFreight:
+    - origin:
+        kind: Warehouse
+        name: team-blue
+      sources:
+        direct: true
+  promotionTemplate:
+    spec:
+      steps:
+        - uses: git-clone
+          config:
+            repoURL: https://github.com/dhpup/akuity-mcp-demo.git
+            checkout:
+              - branch: main
+                path: ./repo
+        - uses: yaml-update
+          config:
+            path: ./repo/teams/team-blue/dev/deployment.yaml
+            updates:
+              - key: spec.template.spec.containers.0.image
+                value: ${{ imageFrom("ghcr.io/akuity/guestbook").RepoURL }}:${{ imageFrom("ghcr.io/akuity/guestbook").Tag }}
+        - uses: git-commit
+          config:
+            path: ./repo
+            message: Promote team-blue ${{ imageFrom("ghcr.io/akuity/guestbook").Tag }} to dev
+        - uses: git-push
+          config:
+            path: ./repo
+        - uses: argocd-update
+          config:
+            apps:
+              - name: team-blue-dev
