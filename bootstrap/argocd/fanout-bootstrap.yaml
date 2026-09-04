@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: fanout-bootstrap
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/dhpup/akuity-mcp-demo.git
+    targetRevision: main
+    path: bootstrap/fanout
+  destination:
+    name: kargo
+    namespace: fanout
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    retry:
+      limit: 10
+      backoff:
+        duration: 10s
+        factor: 2
+        maxDuration: 2m

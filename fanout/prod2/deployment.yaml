@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: guestbook
+  labels:
+    app: guestbook
+    env: prod2
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: guestbook
+  template:
+    metadata:
+      labels:
+        app: guestbook
+        env: prod2
+    spec:
+      containers:
+        - name: guestbook
+          image: ghcr.io/akuity/guestbook:v0.0.1
+          ports:
+            - name: http
+              containerPort: 3000

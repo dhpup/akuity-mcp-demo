@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: fanout-prod4
+  annotations:
+    kargo.akuity.io/authorized-stage: "fanout:prod4"
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/dhpup/akuity-mcp-demo.git
+    targetRevision: main
+    path: fanout/prod4
+  destination:
+    name: mac1
+    namespace: fanout-prod4
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
