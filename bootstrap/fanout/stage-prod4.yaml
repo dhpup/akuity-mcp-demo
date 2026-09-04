@@ -16,28 +16,15 @@ spec:
         stages:
           - staging1
           - staging2
+  # NOTE: This demo pipeline exists to show promotion GATING, so the promotion
+  # is deliberately credential-free: it only syncs the stage's Argo CD
+  # Application and health-checks it. The usual git-clone / yaml-update /
+  # git-commit / git-push steps (see bootstrap/kargo/ for the guestbook
+  # pipeline) need a Git credential Secret in the 'fanout' project namespace,
+  # which does not exist yet.
   promotionTemplate:
     spec:
       steps:
-        - uses: git-clone
-          config:
-            repoURL: https://github.com/dhpup/akuity-mcp-demo.git
-            checkout:
-              - branch: main
-                path: ./repo
-        - uses: yaml-update
-          config:
-            path: ./repo/fanout/prod4/deployment.yaml
-            updates:
-              - key: spec.template.spec.containers.0.image
-                value: ${{ imageFrom("ghcr.io/akuity/guestbook").RepoURL }}:${{ imageFrom("ghcr.io/akuity/guestbook").Tag }}
-        - uses: git-commit
-          config:
-            path: ./repo
-            message: Promote fanout ${{ imageFrom("ghcr.io/akuity/guestbook").Tag }} to prod4
-        - uses: git-push
-          config:
-            path: ./repo
         - uses: argocd-update
           config:
             apps:
