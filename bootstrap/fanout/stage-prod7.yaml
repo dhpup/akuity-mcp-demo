@@ -1,11 +1,11 @@
 apiVersion: kargo.akuity.io/v1alpha1
 kind: Stage
 metadata:
-  name: prod2
+  name: prod7
   namespace: fanout
   annotations:
     argocd.argoproj.io/sync-wave: "2"
-    kargo.akuity.io/color: yellow
+    kargo.akuity.io/color: orange
 spec:
   shard: kargo-mac1
   requestedFreight:
@@ -29,4 +29,4 @@ spec:
         - uses: argocd-update
           config:
             apps:
-              - name: fanout-prod2
+              - name: fanout-prod7

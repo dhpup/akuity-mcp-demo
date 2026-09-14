@@ -22,16 +22,19 @@ A second Kargo project demonstrating **fan-out then fan-in with an AND gate** â€
 the `(cluster a + cluster b) -> (cluster c + cluster d) -> the rest` shape:
 
 ```
-                    +-- staging1 --+
-ghcr.io/.../guestbook -> dev1 --+              +--> prod1, prod2, prod3, prod4
-                    +-- staging2 --+
+                        +-- staging1 --+
+ghcr.io/.../guestbook -> dev1 --+              +--> prod1 .. prod8
+                        +-- staging2 --+
 ```
 
 - `staging1` and `staging2` both subscribe to `dev1` (they open in parallel as
   soon as `dev1` verifies).
-- `prod1`-`prod4` subscribe to **both** stagings and set
+- `prod1`-`prod8` subscribe to **both** stagings and set
   `sources.availabilityStrategy: All`, so freight is not available to any prod
   until it has verified in `staging1` **and** `staging2`.
+- The prods are colored in the Kargo UI via the `kargo.akuity.io/color`
+  annotation on the `Stage`: `prod1`-`prod4` are `yellow`, `prod5`-`prod8` are
+  `orange`, so the two prod waves read apart at a glance.
 
 ```yaml
 requestedFreight:

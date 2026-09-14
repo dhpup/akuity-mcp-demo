@@ -5,6 +5,7 @@ metadata:
   namespace: fanout
   annotations:
     argocd.argoproj.io/sync-wave: "2"
+    kargo.akuity.io/color: yellow
 spec:
   shard: kargo-mac1
   requestedFreight:
