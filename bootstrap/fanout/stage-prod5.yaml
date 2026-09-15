@@ -13,10 +13,8 @@ spec:
         kind: Warehouse
         name: fanout
       sources:
-        availabilityStrategy: All
         stages:
-          - staging1
-          - staging2
+          - control2
   # NOTE: This demo pipeline exists to show promotion GATING, so the promotion
   # is deliberately credential-free: it only syncs the stage's Argo CD
   # Application and health-checks it. The usual git-clone / yaml-update /

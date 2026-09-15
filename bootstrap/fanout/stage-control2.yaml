@@ -1,0 +1,22 @@
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Stage
+metadata:
+  name: control2
+  namespace: fanout
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  shard: kargo-mac1
+  requestedFreight:
+    - origin:
+        kind: Warehouse
+        name: fanout
+      sources:
+        availabilityStrategy: All   # AND: needs BOTH stagings verified.
+        stages:
+          - staging1
+          - staging2
+  # Control flow stage: no promotionTemplate steps, so it deploys nothing and
+  # needs no Argo CD Application. It exists purely as the fan-in gate for one
+  # prod wave — freight lands here once both stagings verify, and opens the
+  # four prods downstream together.
