@@ -23,3 +23,16 @@ an environment directory by hand** — that is the pipeline's write path.
 - Argo CD instance `argocd-instance` — `bsdtcto6dsa10rph.cd.akuity.cloud`
 - Kargo instance `kargo-instance` — `qassw5iwhizl8sq4.kargo.akuity.cloud`
 - Workload cluster `mac1`, Kargo agent/shard `kargo-mac1`
+
+## Team Red (CHANGE-57)
+
+A second, independent pipeline for the same image, under `team-red/`:
+
+| Path | Managed by | Contents |
+| --- | --- | --- |
+| `team-red/bootstrap/argocd/` | direct-applied via the Akuity platform MCP endpoint | `team-red-bootstrap` + `team-red-{dev,staging,prod}` Applications |
+| `team-red/bootstrap/kargo/` | synced by `team-red-bootstrap` | Kargo Project `team-red`, Warehouse, Stage chain |
+| `team-red/{dev,staging,prod}/` | synced by `team-red-{env}` | Deployment + Service, namespaces `team-red-{env}` on `mac1` |
+
+`ghcr.io/akuity/guestbook` → Warehouse → `dev` → `staging` → `prod` (Kargo project `team-red`).
+The same rule applies: the `image:` fields are written only by Kargo promotions.
